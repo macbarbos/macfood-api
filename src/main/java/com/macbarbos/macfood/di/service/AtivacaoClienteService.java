@@ -1,11 +1,8 @@
 package com.macbarbos.macfood.di.service;
 
-import org.springframework.stereotype.Component;
-
 import com.macbarbos.macfood.di.modelo.Cliente;
 import com.macbarbos.macfood.di.notificacao.Notificador;
 
-@Component
 public class AtivacaoClienteService {
 
 	private Notificador notificador;
