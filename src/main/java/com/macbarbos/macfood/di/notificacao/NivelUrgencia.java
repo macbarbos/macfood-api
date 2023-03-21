@@ -4,6 +4,6 @@ package com.macbarbos.macfood.di.notificacao;
 public enum NivelUrgencia {
 	
 	URGENTE,
-	NORMAL
+	SEM_URGENCIA
 
 }
