@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.macbarbos.macfood.MacfoodApiApplication;
 import com.macbarbos.macfood.domain.model.Cozinha;
+import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 
 public class ExclusaoCozinhaMain {
 
@@ -15,12 +16,12 @@ public class ExclusaoCozinhaMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 
-		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+		CozinhasRepository cozinhasRepository = applicationContext.getBean(CozinhasRepository.class);
 		
 		Cozinha cozinha = new Cozinha();
 		cozinha.setId(1l);
 		
-		cadastroCozinha.remover(cozinha);
+		cozinhasRepository.remover(cozinha);
 		
 		
 	}

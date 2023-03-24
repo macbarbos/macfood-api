@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.macbarbos.macfood.MacfoodApiApplication;
 import com.macbarbos.macfood.domain.model.Cozinha;
+import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 
 public class BuscarCozinhaMain {
 
@@ -15,9 +16,9 @@ public class BuscarCozinhaMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 
-		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+		CozinhasRepository cozinhasRepository = applicationContext.getBean(CozinhasRepository.class);
 		
-		Cozinha cozinha = cadastroCozinha.buscar(1L);
+		Cozinha cozinha = cozinhasRepository.buscar(1L);
 		
 		System.out.println(cozinha.getNome());
 	}

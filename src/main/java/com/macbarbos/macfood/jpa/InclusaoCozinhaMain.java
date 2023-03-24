@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.macbarbos.macfood.MacfoodApiApplication;
 import com.macbarbos.macfood.domain.model.Cozinha;
+import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 
 public class InclusaoCozinhaMain {
 
@@ -15,13 +16,13 @@ public class InclusaoCozinhaMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 
-		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+		CozinhasRepository cozinhasRepository = applicationContext.getBean(CozinhasRepository.class);
 		
 		Cozinha cozinha = new Cozinha();
 		cozinha.setId(1l);
 		cozinha.setNome("Brasileira");
 		
-		cadastroCozinha.salvar(cozinha);
+		cozinhasRepository.salvar(cozinha);
 		
 	}
 
