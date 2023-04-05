@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
 import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.repository.CozinhasRepository;
+import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
+import com.macbarbos.macfood.domain.service.exception.EntidadeNaoEncontradaException;
 
 @RestController
 @RequestMapping(value = "/cozinhas") //, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,6 +29,9 @@ public class CozinhaController {
 
 	@Autowired
 	private CozinhasRepository cozinhaRepository;
+	
+	@Autowired
+	private CadastroCozinhaService cadastroCozinha;
 	
 	@GetMapping
 	public List<Cozinha> lista() {
@@ -48,7 +54,7 @@ public class CozinhaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-		return cozinhaRepository.salvar(cozinha);
+		return cadastroCozinha.salvar(cozinha);
 	}
 	
 	@PutMapping("/{cozinhaId}")
@@ -69,14 +75,12 @@ public class CozinhaController {
 	public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
 		
 		try {
-			Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-			if (cozinha != null) {
-				cozinhaRepository.remover(cozinha);
-				return ResponseEntity.noContent().build();
-			}
+			cadastroCozinha.excluir(cozinhaId);
+			return ResponseEntity.noContent().build();
 			
+		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
-		} catch (DataIntegrityViolationException e) {
+		} catch (EntidadeEmUsoException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
