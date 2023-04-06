@@ -12,17 +12,18 @@ public class ExclusaoCozinhaMain {
 
 	public static void main(String[] args) {
 		
-		ApplicationContext applicationContext = new SpringApplicationBuilder(MacfoodApiApplication.class)
-				.web(WebApplicationType.NONE)
-				.run(args);
-
-		CozinhasRepository cozinhasRepository = applicationContext.getBean(CozinhasRepository.class);
-		
-		Cozinha cozinha = new Cozinha();
-		cozinha.setId(1l);
-		
-		cozinhasRepository.remover(cozinha);
-		
+		/*
+		 * ApplicationContext applicationContext = new
+		 * SpringApplicationBuilder(MacfoodApiApplication.class)
+		 * .web(WebApplicationType.NONE) .run(args);
+		 * 
+		 * CozinhasRepository cozinhasRepository =
+		 * applicationContext.getBean(CozinhasRepository.class);
+		 * 
+		 * Cozinha cozinha = new Cozinha(); cozinha.setId(1l);
+		 * 
+		 * cozinhasRepository.remover(cozinha);
+		 */
 		
 	}
 
