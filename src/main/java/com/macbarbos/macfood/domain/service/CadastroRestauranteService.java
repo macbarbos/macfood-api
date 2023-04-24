@@ -6,11 +6,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
+import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 import com.macbarbos.macfood.domain.repository.RestauranteRepository;
-import com.macbarbos.macfood.domain.service.exception.EntidadeNaoEncontradaException;
 
 @Service
 public class CadastroRestauranteService {

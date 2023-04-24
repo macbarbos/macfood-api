@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
+import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.model.Cidade;
 import com.macbarbos.macfood.domain.repository.CidadeRepository;
 import com.macbarbos.macfood.domain.service.CadastroCidadeService;
-import com.macbarbos.macfood.domain.service.exception.EntidadeNaoEncontradaException;
 
 @RestController
 @RequestMapping("/cidades")

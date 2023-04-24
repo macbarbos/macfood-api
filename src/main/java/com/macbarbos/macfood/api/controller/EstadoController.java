@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
+import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.model.Estado;
 import com.macbarbos.macfood.domain.repository.EstadoRepository;
 import com.macbarbos.macfood.domain.service.CadastroEstadoService;
-import com.macbarbos.macfood.domain.service.exception.EntidadeNaoEncontradaException;
 
 @RestController
 @RequestMapping("/estados")

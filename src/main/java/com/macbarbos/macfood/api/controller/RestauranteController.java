@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
+import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.repository.RestauranteRepository;
 import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
-import com.macbarbos.macfood.domain.service.exception.EntidadeNaoEncontradaException;
 
 @RestController
 @RequestMapping("/restaurantes")
