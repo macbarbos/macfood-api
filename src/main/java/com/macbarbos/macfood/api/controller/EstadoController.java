@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.domain.exception.EstadoNaoEncontradoException;
+import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Estado;
 import com.macbarbos.macfood.domain.repository.EstadoRepository;
 import com.macbarbos.macfood.domain.service.CadastroEstadoService;
@@ -42,18 +44,26 @@ public class EstadoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Estado adicionar(@RequestBody Estado estado) {
-		return cadastroEstado.salvar(estado);
+		try {
+			return cadastroEstado.salvar(estado);
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 	}
 
 	@PutMapping("/{estadoId}")
 	public Estado atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-		Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
+		try {
+			Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
 
-		BeanUtils.copyProperties(estado, estadoAtual, "id");
+			BeanUtils.copyProperties(estado, estadoAtual, "id");
 
-		estadoAtual = cadastroEstado.salvar(estadoAtual);
+			estadoAtual = cadastroEstado.salvar(estadoAtual);
 
-		return cadastroEstado.salvar(estadoAtual);
+			return cadastroEstado.salvar(estadoAtual);
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 	}
 
 	@DeleteMapping("/{estadoId}")
@@ -61,5 +71,4 @@ public class EstadoController {
 	public void remover(@PathVariable Long estadoId) {
 		cadastroEstado.excluir(estadoId);
 	}
-
 }

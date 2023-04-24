@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.domain.exception.EstadoNaoEncontradoException;
+import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Cidade;
 import com.macbarbos.macfood.domain.repository.CidadeRepository;
 import com.macbarbos.macfood.domain.service.CadastroCidadeService;
@@ -42,16 +44,27 @@ public class CidadeController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cidade adicionar(@RequestBody Cidade cidade) {
+		
+		try {
 			return cadastroCidade.salvar(cidade);
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+			
 	}
 
 	@PutMapping("/{cidadeId}")
 	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
-		Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElse(null);
-
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-
-		return cadastroCidade.salvar(cidadeAtual);
+		try {
+			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
+			
+			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+			
+			return cadastroCidade.salvar(cidadeAtual);
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+		
 	}
 
 	@DeleteMapping("/{cidadeId}")

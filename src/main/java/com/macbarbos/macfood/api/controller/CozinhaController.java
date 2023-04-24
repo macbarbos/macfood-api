@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.domain.exception.CozinhaNaoEncontradaException;
+import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
@@ -42,7 +44,12 @@ public class CozinhaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-		return cadastroCozinha.salvar(cozinha);
+		try {
+			return cadastroCozinha.salvar(cozinha);
+		} catch (CozinhaNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+
 	}
 
 	@PutMapping("/{cozinhaId}")
@@ -51,7 +58,11 @@ public class CozinhaController {
 
 		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-		return cadastroCozinha.salvar(cozinhaAtual);
+		try {
+			return cadastroCozinha.salvar(cozinhaAtual);
+		} catch (CozinhaNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 	}
 
 	@DeleteMapping("/{cozinhaId}")
