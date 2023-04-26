@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.macbarbos.macfood.domain.exception.CozinhaNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.exception.RestauranteNaoEncontradoException;
 import com.macbarbos.macfood.domain.model.Restaurante;
@@ -64,11 +66,11 @@ public class RestauranteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
+	public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
 		try {
 			return cadastroRestaurante.salvar(restaurante);
-		} catch (RestauranteNaoEncontradoException e) {
-			throw new NegocioException(e.getMessage(), e);
+		} catch (CozinhaNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
 		}
 	}
 
