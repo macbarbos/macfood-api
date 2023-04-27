@@ -2,6 +2,8 @@ package com.macbarbos.macfood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +45,7 @@ public class EstadoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estado adicionar(@RequestBody Estado estado) {
+	public Estado adicionar(@RequestBody @Valid Estado estado) {
 		try {
 			return cadastroEstado.salvar(estado);
 		} catch (EstadoNaoEncontradoException e) {
@@ -52,7 +54,7 @@ public class EstadoController {
 	}
 
 	@PutMapping("/{estadoId}")
-	public Estado atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
+	public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
 		try {
 			Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
 
