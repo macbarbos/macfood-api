@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.macbarbos.macfood.Groups;
+import com.macbarbos.macfood.core.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

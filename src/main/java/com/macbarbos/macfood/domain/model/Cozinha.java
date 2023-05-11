@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.macbarbos.macfood.Groups;
+import com.macbarbos.macfood.core.Groups;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

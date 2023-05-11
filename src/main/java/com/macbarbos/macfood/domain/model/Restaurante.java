@@ -26,8 +26,8 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.macbarbos.macfood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.macbarbos.macfood.core.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,6 +46,7 @@ public class Restaurante {
 	@Column(nullable = false)
 	private String nome;
 	
+	@NotNull
 	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;

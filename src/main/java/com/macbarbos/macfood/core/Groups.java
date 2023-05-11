@@ -1,4 +1,4 @@
-package com.macbarbos.macfood;
+package com.macbarbos.macfood.core;
 
 public interface Groups {
 	
