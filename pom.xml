@@ -64,9 +64,8 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
-		    <version>4.12</version><!--$NO-MVN-MAN-VER$-->
+		    <groupId>io.rest-assured</groupId>
+		    <artifactId>rest-assured</artifactId>
 		    <scope>test</scope>
 		</dependency>
 	</dependencies>
