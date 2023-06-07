@@ -1,4 +1,4 @@
-package com.macbarbos.macfood.core;
+package com.macbarbos.macfood.core.validation;
 
 public interface Groups {
 	
