@@ -1,79 +1,78 @@
 package com.macbarbos.macfood;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 
-import javax.validation.ConstraintViolationException;
-
-import org.junit.jupiter.api.Assertions;
+import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import com.macbarbos.macfood.domain.exception.CozinhaNaoEncontradaException;
-import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
-import com.macbarbos.macfood.domain.model.Cozinha;
-import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+@SuppressWarnings("deprecation")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CadastroCozinhaIntegrationIT {
-
-	/*
-	 * @Autowired private CadastroCozinhaService cadastroCozinha;
-	 */
+@TestPropertySource("/application-test.properties")
+public class CadastroCozinhaIntegrationIT {
 
 	@LocalServerPort
 	private int port;
+	
+	@Autowired
+	private Flyway flyway;
 
-	/*
-	 * @Test public void testarCadastroCozinhaComSucesso() { // cenário Cozinha
-	 * novaCozinha = new Cozinha(); novaCozinha.setNome("Chinesa");
-	 * 
-	 * // ação novaCozinha = cadastroCozinha.salvar(novaCozinha);
-	 * 
-	 * // validação assertThat(novaCozinha).isNotNull();
-	 * assertThat(novaCozinha.getId()).isNotNull(); }
-	 * 
-	 * @Test public void testarCadastroCozinhaSemNome() {
-	 * 
-	 * ConstraintViolationException erroEsperado =
-	 * Assertions.assertThrows(ConstraintViolationException.class, () -> { // Code
-	 * under test Cozinha novaCozinha = new Cozinha(); novaCozinha.setNome(null);
-	 * 
-	 * novaCozinha = cadastroCozinha.salvar(novaCozinha); });
-	 * assertThat(erroEsperado).isNotNull(); }
-	 * 
-	 * @Test public void deveFalhar_QuandoExcluirCozinhaEmUso() {
-	 * 
-	 * EntidadeEmUsoException erroEsperado =
-	 * Assertions.assertThrows(EntidadeEmUsoException.class, () -> { // Code under
-	 * test cadastroCozinha.excluir(1L); }); assertThat(erroEsperado).isNotNull(); }
-	 * 
-	 * @Test public void deveFalhar_QuandoExcluirCozinhaNaoExistente() {
-	 * 
-	 * CozinhaNaoEncontradaException erroEsperado =
-	 * Assertions.assertThrows(CozinhaNaoEncontradaException.class, () -> {
-	 * cadastroCozinha.excluir(100L); }); assertThat(erroEsperado).isNotNull(); }
-	 */
+	@BeforeEach
+	public void setUp() {
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		RestAssured.port = port;
+		RestAssured.basePath = "/cozinhas";
+		
+		flyway.migrate();
+	}
+
 	@Test
 	public void deveRetornarStatus200_QuandoConsultarCozinhas() {
-		//RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
 		given()
-			.basePath("/cozinhas")
-			.port(port).accept(ContentType.JSON)
-			.when()
-				.get()
-			.then()
-				.statusCode(HttpStatus.OK.value());
+			.accept(ContentType.JSON)
+		.when()
+			.get()
+		.then()
+			.statusCode(HttpStatus.OK.value());
+	}
+
+	@Test
+	public void deveConter4Cozinhas_QuandoConsultarCozinhas() {
+
+		given()
+			.accept(ContentType.JSON)
+		.when()
+			.get()
+		.then()
+			.body("", hasSize(4))
+			.body("nome", hasItems("Indiana", "Tailandesa"));
+	}
+	
+	@Test
+	public void deveRetornar201_QuandoCadastrarCozinha() {
+
+		given()
+			.body("{ \"nome\": \"Chinesa\" }")
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.CREATED.value());
 	}
 
 }
