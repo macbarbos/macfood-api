@@ -46,10 +46,10 @@ public class RestauranteController {
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestaurante;
-	
+
 	@Autowired
 	private RestauranteModelConverter restauranteModelConverter1;
-	
+
 	@Autowired
 	private RestauranteConverter restauranteConverter;
 
@@ -57,16 +57,6 @@ public class RestauranteController {
 	public List<RestauranteModel> listar() {
 		return restauranteModelConverter1.toCollectionModel(restauranteRepository.findAll());
 	}
-
-	/*
-	 * @GetMapping("/{restauranteId}") public ResponseEntity<Restaurante>
-	 * buscar(@PathVariable Long restauranteId) { Restaurante restaurante =
-	 * restauranteRepository.findById(restauranteId).orElse(null);
-	 * 
-	 * if (restaurante != null) { return ResponseEntity.ok(restaurante); }
-	 * 
-	 * return ResponseEntity.notFound().build(); }
-	 */
 
 	@GetMapping("/{restauranteId}")
 	public RestauranteModel buscar(@PathVariable Long restauranteId) {
@@ -78,7 +68,7 @@ public class RestauranteController {
 	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
 			Restaurante restaurante = restauranteConverter.toDomainObject(restauranteInput);
-			
+
 			return restauranteModelConverter1.toModel(cadastroRestaurante.salvar(restaurante));
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
@@ -86,15 +76,13 @@ public class RestauranteController {
 	}
 
 	@PutMapping("/{restauranteId}")
-	public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
+	public RestauranteModel atualizar(@PathVariable Long restauranteId,
+			@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
-//			Restaurante restaurante = restauranteConverter.toDomainObject(restauranteInput);
 			Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
-			
+
 			restauranteConverter.copyToDomainObject(restauranteInput, restauranteAtual);
 
-//			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
-//					"produtos");
 			return restauranteModelConverter1.toModel(cadastroRestaurante.salvar(restauranteAtual));
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
@@ -116,20 +104,6 @@ public class RestauranteController {
 	public void remover(@PathVariable Long restauranteId) {
 		cadastroRestaurante.excluir(restauranteId);
 	}
-
-	/*
-	 * @PatchMapping("/{restauranteId}") public ResponseEntity<?>
-	 * atualizarParcial(@PathVariable Long restauranteId,
-	 * 
-	 * @RequestBody Map<String, Object> campos) { Restaurante restauranteAtual =
-	 * restauranteRepository.findById(restauranteId).orElse(null);
-	 * 
-	 * if (restauranteAtual == null) { return ResponseEntity.notFound().build(); }
-	 * 
-	 * populator(campos, restauranteAtual);
-	 * 
-	 * return atualizar(restauranteId, restauranteAtual); }
-	 */
 
 	private void populator(Map<String, Object> dadosOrigem, Restaurante restauranteDestino,
 			HttpServletRequest request) {
@@ -154,5 +128,17 @@ public class RestauranteController {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
 		}
+	}
+
+	@PutMapping("/{restauranteId}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void ativar(@PathVariable Long restauranteId) {
+		cadastroRestaurante.ativar(restauranteId);
+	}
+
+	@DeleteMapping("/{restauranteId}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inativar(@PathVariable Long restauranteId) {
+		cadastroRestaurante.inativar(restauranteId);
 	}
 }
