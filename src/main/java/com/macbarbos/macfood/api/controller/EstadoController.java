@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.macbarbos.macfood.domain.exception.EstadoNaoEncontradoException;
-import com.macbarbos.macfood.domain.exception.NegocioException;
+import com.macbarbos.macfood.api.converters.EstadoConverter;
+import com.macbarbos.macfood.api.converters.EstadoModelConverter;
+import com.macbarbos.macfood.api.model.EstadoModel;
+import com.macbarbos.macfood.api.model.input.EstadoInput;
 import com.macbarbos.macfood.domain.model.Estado;
 import com.macbarbos.macfood.domain.repository.EstadoRepository;
 import com.macbarbos.macfood.domain.service.CadastroEstadoService;
@@ -32,40 +33,46 @@ public class EstadoController {
 
 	@Autowired
 	private CadastroEstadoService cadastroEstado;
+	
+	@Autowired
+	private EstadoModelConverter estadoModelConverter;
+	
+	@Autowired
+	private EstadoConverter estadoConverter;
 
 	@GetMapping
-	public List<Estado> listar() {
-		return estadoRepository.findAll();
+	public List<EstadoModel> listar() {
+		List<Estado> todosEstados = estadoRepository.findAll();
+		
+		return estadoModelConverter.toCollectionModel(todosEstados);
 	}
 
 	@GetMapping("/{estadoId}")
-	public Estado buscar(@PathVariable Long estadoId) {
-		return cadastroEstado.buscarOuFalhar(estadoId);
+	public EstadoModel buscar(@PathVariable Long estadoId) {
+		Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
+		
+		return estadoModelConverter.toModel(estado);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estado adicionar(@RequestBody @Valid Estado estado) {
-		try {
-			return cadastroEstado.salvar(estado);
-		} catch (EstadoNaoEncontradoException e) {
-			throw new NegocioException(e.getMessage(), e);
-		}
+	public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
+		Estado estado = estadoConverter.toDomainObject(estadoInput);
+	    
+	    estado = cadastroEstado.salvar(estado);
+		
+	    return estadoModelConverter.toModel(estado);
 	}
 
 	@PutMapping("/{estadoId}")
-	public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
-		try {
-			Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
-
-			BeanUtils.copyProperties(estado, estadoAtual, "id");
-
-			estadoAtual = cadastroEstado.salvar(estadoAtual);
-
-			return cadastroEstado.salvar(estadoAtual);
-		} catch (EstadoNaoEncontradoException e) {
-			throw new NegocioException(e.getMessage(), e);
-		}
+	public EstadoModel atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
+		Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
+	    
+	    estadoConverter.copyToDomainObject(estadoInput, estadoAtual);
+	    
+	    estadoAtual = cadastroEstado.salvar(estadoAtual);
+	    
+	    return estadoModelConverter.toModel(estadoAtual);
 	}
 
 	@DeleteMapping("/{estadoId}")

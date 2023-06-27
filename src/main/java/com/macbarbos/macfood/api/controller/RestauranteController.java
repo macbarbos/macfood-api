@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -89,11 +88,13 @@ public class RestauranteController {
 	@PutMapping("/{restauranteId}")
 	public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
-			Restaurante restaurante = restauranteConverter.toDomainObject(restauranteInput);
+//			Restaurante restaurante = restauranteConverter.toDomainObject(restauranteInput);
 			Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
+			
+			restauranteConverter.copyToDomainObject(restauranteInput, restauranteAtual);
 
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
-					"produtos");
+//			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro",
+//					"produtos");
 			return restauranteModelConverter1.toModel(cadastroRestaurante.salvar(restauranteAtual));
 		} catch (RestauranteNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
