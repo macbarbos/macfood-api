@@ -30,9 +30,9 @@ import com.macbarbos.macfood.api.converters.RestauranteConverter;
 import com.macbarbos.macfood.api.converters.RestauranteModelConverter;
 import com.macbarbos.macfood.api.model.RestauranteModel;
 import com.macbarbos.macfood.api.model.input.RestauranteInput;
+import com.macbarbos.macfood.domain.exception.CidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.CozinhaNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
-import com.macbarbos.macfood.domain.exception.RestauranteNaoEncontradoException;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.repository.RestauranteRepository;
 import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
@@ -48,19 +48,19 @@ public class RestauranteController {
 	private CadastroRestauranteService cadastroRestaurante;
 
 	@Autowired
-	private RestauranteModelConverter restauranteModelConverter1;
+	private RestauranteModelConverter restauranteModelConverter;
 
 	@Autowired
 	private RestauranteConverter restauranteConverter;
 
 	@GetMapping
 	public List<RestauranteModel> listar() {
-		return restauranteModelConverter1.toCollectionModel(restauranteRepository.findAll());
+		return restauranteModelConverter.toCollectionModel(restauranteRepository.findAll());
 	}
 
 	@GetMapping("/{restauranteId}")
 	public RestauranteModel buscar(@PathVariable Long restauranteId) {
-		return restauranteModelConverter1.toModel(cadastroRestaurante.buscarOuFalhar(restauranteId));
+		return restauranteModelConverter.toModel(cadastroRestaurante.buscarOuFalhar(restauranteId));
 	}
 
 	@PostMapping
@@ -69,7 +69,7 @@ public class RestauranteController {
 		try {
 			Restaurante restaurante = restauranteConverter.toDomainObject(restauranteInput);
 
-			return restauranteModelConverter1.toModel(cadastroRestaurante.salvar(restaurante));
+			return restauranteModelConverter.toModel(cadastroRestaurante.salvar(restaurante));
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
@@ -80,12 +80,12 @@ public class RestauranteController {
 			@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
 			Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
-
+			
 			restauranteConverter.copyToDomainObject(restauranteInput, restauranteAtual);
-
-			return restauranteModelConverter1.toModel(cadastroRestaurante.salvar(restauranteAtual));
-		} catch (RestauranteNaoEncontradoException e) {
-			throw new NegocioException(e.getMessage(), e);
+			
+			return restauranteModelConverter.toModel(cadastroRestaurante.salvar(restauranteAtual));
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
 		}
 	}
 

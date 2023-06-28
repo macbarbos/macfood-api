@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.macbarbos.macfood.domain.exception.EntidadeEmUsoException;
 import com.macbarbos.macfood.domain.exception.RestauranteNaoEncontradoException;
+import com.macbarbos.macfood.domain.model.Cidade;
 import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.repository.RestauranteRepository;
@@ -23,28 +24,19 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
 
+	@Autowired
+	private CadastroCidadeService cadastroCidade;
+
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
-		/*
-		 * Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
-		 * 
-		 * if (cozinha.isEmpty()) { throw new EntidadeNaoEncontradaException(
-		 * String.format("Não existe cadastro de cozinha com código %d", cozinhaId)); }
-		 * 
-		 * restaurante.setCozinha(cozinha.get());
-		 * 
-		 * return restauranteRepository.salvar(restaurante);
-		 */
-		/*
-		 * Cozinha cozinha = cozinhaRepository.findById(cozinhaId) .orElseThrow(() ->
-		 * new EntidadeNaoEncontradaException(
-		 * String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, cozinhaId)));
-		 */
+		Long cidadeId = restaurante.getEndereco().getCidade().getId();
 
 		Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
+		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 
 		restaurante.setCozinha(cozinha);
+		restaurante.getEndereco().setCidade(cidade);
 
 		return restauranteRepository.save(restaurante);
 	}
@@ -60,24 +52,24 @@ public class CadastroRestauranteService {
 			throw new EntidadeEmUsoException(String.format(MSG_RESTAURANTE_EM_USO, restauranteId));
 		}
 	}
-	
+
 	@Transactional
 	public void ativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		
+
 		restauranteAtual.ativar();
 	}
-	
+
 	@Transactional
 	public void inativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		
+
 		restauranteAtual.inativar();
 	}
 
 	public Restaurante buscarOuFalhar(Long restauranteId) {
-		return restauranteRepository.findById(restauranteId).orElseThrow(
-				() -> new RestauranteNaoEncontradoException(restauranteId));
+		return restauranteRepository.findById(restauranteId)
+				.orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
 	}
 
 }
