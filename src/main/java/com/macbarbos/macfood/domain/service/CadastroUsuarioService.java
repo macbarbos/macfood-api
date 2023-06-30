@@ -1,5 +1,7 @@
 package com.macbarbos.macfood.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,15 @@ public class CadastroUsuarioService {
 
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
+		usuarioRepository.detach(usuario);
+
+		Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+
+		if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
+			throw new NegocioException(
+					String.format("Já existe um usuário cadastrado com o e-mail %s", usuario.getEmail()));
+		}
+
 		return usuarioRepository.save(usuario);
 	}
 
