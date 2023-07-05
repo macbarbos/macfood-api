@@ -1,5 +1,7 @@
 package com.macbarbos.macfood.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -73,6 +75,16 @@ public class CadastroRestauranteService {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 
 		restauranteAtual.inativar();
+	}
+	
+	@Transactional
+	public void inativarRestaurantesEmMassa(List<Long> restauranteIds) {
+		restauranteIds.forEach(this::inativar);
+	}
+	
+	@Transactional
+	public void ativarRestaurantesEmMassa(List<Long> restauranteIds) {
+		restauranteIds.forEach(this::ativar);
 	}
 	
 	@Transactional
