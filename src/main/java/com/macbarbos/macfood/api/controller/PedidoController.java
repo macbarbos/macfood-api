@@ -31,50 +31,51 @@ import com.macbarbos.macfood.domain.service.EmissaoPedidoService;
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
 
-    @Autowired
-    private PedidoRepository pedidoRepository;
-    
-    @Autowired
-    private EmissaoPedidoService emissaoPedido;
-    
-    @Autowired
-    private PedidoModelConverter pedidoModelConverter;
-    
-    @Autowired
-    private PedidoResumoModelConverter pedidoResumoModelConverter;
-    
-    @Autowired
-    private PedidoConverter pedidoConverter;
-    
-    @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> todosPedidos = pedidoRepository.findAll();
-        
-        return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
-    }
-    
-    @GetMapping("/{pedidoId}")
-    public PedidoModel buscar(@PathVariable Long pedidoId) {
-        Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
-        
-        return pedidoModelConverter.toModel(pedido);
-    }
-    
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
-        try {
-            Pedido novoPedido = pedidoConverter.toDomainObject(pedidoInput);
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private EmissaoPedidoService emissaoPedido;
+	
+	@Autowired
+	private PedidoModelConverter pedidoModelConverter;
+	
+	@Autowired
+	private PedidoResumoModelConverter pedidoResumoModelConverter;
+	
+	@Autowired
+	private PedidoConverter pedidoConverter;
+	
+	@GetMapping
+	public List<PedidoResumoModel> listar() {
+		List<Pedido> todosPedidos = pedidoRepository.findAll();
+		
+		return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
+	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
+		try {
+			Pedido novoPedido = pedidoConverter.toDomainObject(pedidoInput);
 
-            // TODO pegar usuário autenticado
-            novoPedido.setCliente(new Usuario());
-            novoPedido.getCliente().setId(1L);
+			// TODO pegar usuário autenticado
+			novoPedido.setCliente(new Usuario());
+			novoPedido.getCliente().setId(1L);
 
-            novoPedido = emissaoPedido.emitir(novoPedido);
+			novoPedido = emissaoPedido.emitir(novoPedido);
 
-            return pedidoModelConverter.toModel(novoPedido);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage(), e);
-        }
-    }
+			return pedidoModelConverter.toModel(novoPedido);
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	}
+	
+	@GetMapping("/{codigoPedido}")
+	public PedidoModel buscar(@PathVariable String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
+		
+		return pedidoModelConverter.toModel(pedido);
+	}
+	
 }
