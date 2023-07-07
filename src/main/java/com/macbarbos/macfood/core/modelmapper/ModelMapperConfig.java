@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.macbarbos.macfood.api.model.EnderecoModel;
+import com.macbarbos.macfood.api.model.input.ItemPedidoInput;
 import com.macbarbos.macfood.domain.model.Endereco;
+import com.macbarbos.macfood.domain.model.ItemPedido;
 
 @Configuration
 public class ModelMapperConfig {
@@ -16,6 +18,9 @@ public class ModelMapperConfig {
 
 //		modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
 //			.addMapping(Restaurante::getTaxaFrete, RestauranteModel::setPrecoFrete);
+		
+		modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)
+	    .addMappings(mapper -> mapper.skip(ItemPedido::setId)); 
 		
 		var enderecoToEnderecoModelTypeMap = modelMapper.createTypeMap(
 				Endereco.class, EnderecoModel.class);
