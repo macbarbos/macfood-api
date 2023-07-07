@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.api.converters.PedidoModelConverter;
+import com.macbarbos.macfood.api.converters.PedidoResumoModelConverter;
 import com.macbarbos.macfood.api.model.PedidoModel;
+import com.macbarbos.macfood.api.model.PedidoResumoModel;
 import com.macbarbos.macfood.domain.model.Pedido;
 import com.macbarbos.macfood.domain.repository.PedidoRepository;
 import com.macbarbos.macfood.domain.service.EmissaoPedidoService;
@@ -27,11 +29,14 @@ public class PedidoController {
     @Autowired
     private PedidoModelConverter pedidoModelConverter;
     
+    @Autowired
+    private PedidoResumoModelConverter pedidoResumoModelConverter;
+    
     @GetMapping
-    public List<PedidoModel> listar() {
+    public List<PedidoResumoModel> listar() {
         List<Pedido> todosPedidos = pedidoRepository.findAll();
         
-        return pedidoModelConverter.toCollectionModel(todosPedidos);
+        return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
     }
     
     @GetMapping("/{pedidoId}")
