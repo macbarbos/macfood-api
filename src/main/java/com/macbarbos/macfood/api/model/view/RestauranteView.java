@@ -1,4 +1,4 @@
-package com.macbarbos.macfood.api.model.input.view;
+package com.macbarbos.macfood.api.model.view;
 
 public interface RestauranteView {
 	

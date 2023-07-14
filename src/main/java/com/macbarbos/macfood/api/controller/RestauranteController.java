@@ -31,7 +31,7 @@ import com.macbarbos.macfood.api.converters.RestauranteConverter;
 import com.macbarbos.macfood.api.converters.RestauranteModelConverter;
 import com.macbarbos.macfood.api.model.RestauranteModel;
 import com.macbarbos.macfood.api.model.input.RestauranteInput;
-import com.macbarbos.macfood.api.model.input.view.RestauranteView;
+import com.macbarbos.macfood.api.model.view.RestauranteView;
 import com.macbarbos.macfood.domain.exception.CidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.CozinhaNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.NegocioException;

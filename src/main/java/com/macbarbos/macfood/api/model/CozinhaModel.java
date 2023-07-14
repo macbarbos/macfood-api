@@ -1,7 +1,7 @@
 package com.macbarbos.macfood.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.macbarbos.macfood.api.model.input.view.RestauranteView;
+import com.macbarbos.macfood.api.model.view.RestauranteView;
 
 import lombok.Getter;
 import lombok.Setter;
