@@ -25,7 +25,9 @@ import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Pedido;
 import com.macbarbos.macfood.domain.model.Usuario;
 import com.macbarbos.macfood.domain.repository.PedidoRepository;
+import com.macbarbos.macfood.domain.repository.filter.PedidoFilter;
 import com.macbarbos.macfood.domain.service.EmissaoPedidoService;
+import com.macbarbos.macfood.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping(value = "/pedidos")
@@ -46,9 +48,15 @@ public class PedidoController {
 	@Autowired
 	private PedidoConverter pedidoConverter;
 	
+//	@GetMapping
+//	public List<PedidoResumoModel> listar() {
+//		List<Pedido> todosPedidos = pedidoRepository.findAll();
+//		
+//		return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
+//	}
 	@GetMapping
-	public List<PedidoResumoModel> listar() {
-		List<Pedido> todosPedidos = pedidoRepository.findAll();
+	public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+		List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 		
 		return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
 	}
