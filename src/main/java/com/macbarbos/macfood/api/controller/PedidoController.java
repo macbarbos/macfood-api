@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.ImmutableMap;
 import com.macbarbos.macfood.api.converters.PedidoConverter;
 import com.macbarbos.macfood.api.converters.PedidoModelConverter;
 import com.macbarbos.macfood.api.converters.PedidoResumoModelConverter;
 import com.macbarbos.macfood.api.model.PedidoModel;
 import com.macbarbos.macfood.api.model.PedidoResumoModel;
 import com.macbarbos.macfood.api.model.input.PedidoInput;
+import com.macbarbos.macfood.core.data.PageableTranslator;
 import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Pedido;
@@ -58,19 +60,22 @@ public class PedidoController {
 //		
 //		return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
 //	}
+
 	@GetMapping
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
-	        @PageableDefault(size = 10) Pageable pageable) {
-	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
-	            PedidoSpecs.usandoFiltro(filtro), pageable);
-	    
-	    List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelConverter
-	            .toCollectionModel(pedidosPage.getContent());
-	    
-	    Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(
-	            pedidosResumoModel, pageable, pedidosPage.getTotalElements());
-	    
-	    return pedidosResumoModelPage;
+			@PageableDefault(size = 10) Pageable pageable) {
+		pageable = traduzirPageable(pageable);
+		
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(
+				PedidoSpecs.usandoFiltro(filtro), pageable);
+		
+		List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelConverter
+				.toCollectionModel(pedidosPage.getContent());
+		
+		Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(
+				pedidosResumoModel, pageable, pedidosPage.getTotalElements());
+		
+		return pedidosResumoModelPage;
 	}
 	
 	@PostMapping
@@ -96,6 +101,17 @@ public class PedidoController {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		
 		return pedidoModelConverter.toModel(pedido);
+	}
+	
+	private Pageable traduzirPageable(Pageable apiPageable) {
+		var mapeamento = ImmutableMap.of(
+				"codigo", "codigo",
+				"restaurante.nome", "restaurante.nome",
+				"nomeCliente", "cliente.nome",
+				"valorTotal", "valorTotal"
+			);
+		
+		return PageableTranslator.translate(apiPageable, mapeamento);
 	}
 	
 }
