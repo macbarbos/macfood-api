@@ -1,25 +1,36 @@
 package com.macbarbos.macfood.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.macbarbos.macfood.api.converters.FotoProdutoModelConverter;
 import com.macbarbos.macfood.api.model.FotoProdutoModel;
 import com.macbarbos.macfood.api.model.input.FotoProdutoInput;
+import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.model.FotoProduto;
 import com.macbarbos.macfood.domain.model.Produto;
 import com.macbarbos.macfood.domain.service.CadastroProdutoService;
 import com.macbarbos.macfood.domain.service.CatalogoFotoProdutoService;
+import com.macbarbos.macfood.domain.service.FotoStorageService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
@@ -30,6 +41,9 @@ public class RestauranteProdutoFotoController {
 	
 	@Autowired
 	private CatalogoFotoProdutoService catalogoFotoProduto;
+	
+	@Autowired
+	private FotoStorageService fotoStorage;
 	
 	@Autowired
 	private FotoProdutoModelConverter fotoProdutoModelConverter;
@@ -53,11 +67,52 @@ public class RestauranteProdutoFotoController {
 		return fotoProdutoModelConverter.toModel(fotoSalva);
 	}
 	
-	@GetMapping
-	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+	@DeleteMapping
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void excluir(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId) {
+		catalogoFotoProduto.excluir(restauranteId, produtoId);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId) {
 		FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
 		
 		return fotoProdutoModelConverter.toModel(fotoProduto);
+	}
+	
+	@GetMapping
+	public ResponseEntity<InputStreamResource> servir(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) 
+					throws HttpMediaTypeNotAcceptableException {
+		try {
+			FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+			
+			MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
+			List<MediaType> mediaTypesAceitas = MediaType.parseMediaTypes(acceptHeader);
+			
+			verificarCompatibilidadeMediaType(mediaTypeFoto, mediaTypesAceitas);
+			
+			InputStream inputStream = fotoStorage.recuperar(fotoProduto.getNomeArquivo());
+			
+			return ResponseEntity.ok()
+					.contentType(mediaTypeFoto)
+					.body(new InputStreamResource(inputStream));
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, 
+			List<MediaType> mediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+		
+		boolean compativel = mediaTypesAceitas.stream()
+				.anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
+		
+		if (!compativel) {
+			throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
+		}
 	}
 	
 }
