@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.macbarbos.macfood.domain.service.EnvioEmailService;
 import com.macbarbos.macfood.infrastructure.service.email.FakeEnvioEmailService;
+import com.macbarbos.macfood.infrastructure.service.email.SandboxEnvioEmailService;
 import com.macbarbos.macfood.infrastructure.service.email.SmtpEnvioEmailService;
 
 @Configuration
@@ -22,6 +23,8 @@ public class EmailConfig {
 				return new FakeEnvioEmailService();
 			case SMTP:
 				return new SmtpEnvioEmailService();
+			case SANDBOX:
+				return new SandboxEnvioEmailService();
 			default:
 				return null;
 		}
