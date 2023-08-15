@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.macbarbos.macfood.domain.model.Pedido;
-import com.macbarbos.macfood.domain.service.EnvioEmailService.Mensagem;
+import com.macbarbos.macfood.domain.repository.PedidoRepository;
 
 @Service
 public class FluxoPedidoService {
@@ -14,21 +14,14 @@ public class FluxoPedidoService {
 	private EmissaoPedidoService emissaoPedido;
 	
 	@Autowired
-	private EnvioEmailService envioEmailService;
+	private PedidoRepository pedidoRepository;
 	
 	@Transactional
 	public void confirmar(String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
 		
-		var mensagen = Mensagem.builder()
-				.assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado.")
-				.corpo("pedido-confirmado.html")
-				.variavel("pedido", pedido)
-				.destinatario(pedido.getCliente().getEmail())
-				.build();
-		
-		envioEmailService.enviar(mensagen);
+		pedidoRepository.save(pedido);
 	}
 	
 	@Transactional
