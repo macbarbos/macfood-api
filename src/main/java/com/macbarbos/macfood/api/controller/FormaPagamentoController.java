@@ -77,6 +77,10 @@ public class FormaPagamentoController {
         
         return ResponseEntity.ok()
         		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+ //       		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) //somente no browser
+ //       		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //já vem por padrão quando não usamos
+ //       		.cacheControl(CacheControl.noCache()) //não quer dizer que não tem cache mas sim que precisa validar o chache, ou seja, precisa do ETags
+//        		.cacheControl(CacheControl.noStore()) //Não permite armazenamento de cache, nem localmente
         		.body(formaPagamentoModel);
     }
     
