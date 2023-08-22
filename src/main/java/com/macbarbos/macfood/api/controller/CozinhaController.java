@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +25,14 @@ import com.macbarbos.macfood.api.converters.CozinhaConverter;
 import com.macbarbos.macfood.api.converters.CozinhaModelConverter;
 import com.macbarbos.macfood.api.model.CozinhaModel;
 import com.macbarbos.macfood.api.model.input.CozinhaInput;
+import com.macbarbos.macfood.api.openapi.controller.CozinhaControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
 
 @RestController
-@RequestMapping(value = "/cozinhas") // , produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaController {
+@RequestMapping(path = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CozinhaController implements CozinhaControllerOpenApi{
 
 	@Autowired
 	private CozinhasRepository cozinhaRepository;

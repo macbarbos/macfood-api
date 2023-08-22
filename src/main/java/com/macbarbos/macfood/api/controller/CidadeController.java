@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.macbarbos.macfood.api.controller.openapi.CidadeControllerOpenApi;
 import com.macbarbos.macfood.api.converters.CidadeConverter;
 import com.macbarbos.macfood.api.converters.CidadeModelConverter;
 import com.macbarbos.macfood.api.model.CidadeModel;
 import com.macbarbos.macfood.api.model.input.CidadeInput;
+import com.macbarbos.macfood.api.openapi.controller.CidadeControllerOpenApi;
 import com.macbarbos.macfood.domain.exception.EstadoNaoEncontradoException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Cidade;

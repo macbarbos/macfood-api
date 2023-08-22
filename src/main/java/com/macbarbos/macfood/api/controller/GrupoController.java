@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.macbarbos.macfood.api.controller.openapi.GrupoControllerOpenApi;
 import com.macbarbos.macfood.api.converters.GrupoConverter;
 import com.macbarbos.macfood.api.converters.GrupoModelConverter;
 import com.macbarbos.macfood.api.model.GrupoModel;
 import com.macbarbos.macfood.api.model.input.GrupoInput;
+import com.macbarbos.macfood.api.openapi.controller.GrupoControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Grupo;
 import com.macbarbos.macfood.domain.repository.GrupoRepository;
 import com.macbarbos.macfood.domain.service.CadastroGrupoService;

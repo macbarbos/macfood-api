@@ -1,4 +1,4 @@
-package com.macbarbos.macfood.core.openapi.model;
+package com.macbarbos.macfood.api.openapi.model;
 
 import java.util.List;
 
