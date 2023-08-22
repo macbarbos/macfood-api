@@ -2,6 +2,7 @@ package com.macbarbos.macfood.api.model.input;
 
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,8 @@ import lombok.Setter;
 @Getter
 public class CidadeIdInput {
 
-    @NotNull
-    private Long id;
+	@ApiModelProperty(example = "1", required = true)
+	@NotNull
+	private Long id;
     
 }

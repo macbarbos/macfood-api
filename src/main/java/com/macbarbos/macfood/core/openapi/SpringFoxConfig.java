@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.query.ParameterBinder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -23,7 +22,6 @@ import com.macbarbos.macfood.api.openapi.model.PageableModelOpenApi;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -58,13 +56,13 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
 				.globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages())
 				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
-				.globalOperationParameters(Arrays.asList(
-						new ParameterBuilder()
-						.name("campos")
-						.description("Nomes das propriedades para filtrar na resposta, separados por vírgula")
-						.parameterType("query")
-						.modelRef(new ModelRef("strinh"))
-						.build()))
+//				.globalOperationParameters(Arrays.asList(
+//						new ParameterBuilder()
+//						.name("campos")
+//						.description("Nomes das propriedades para filtrar na resposta, separados por vírgula")
+//						.parameterType("query")
+//						.modelRef(new ModelRef("strinh"))
+//						.build()))
 				.additionalModels(typeResolver.resolve(Problem.class))
 				.ignoredParameterTypes(ServletWebRequest.class)
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
