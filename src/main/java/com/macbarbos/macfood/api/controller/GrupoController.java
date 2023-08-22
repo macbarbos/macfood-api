@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.api.controller.openapi.GrupoControllerOpenApi;
 import com.macbarbos.macfood.api.converters.GrupoConverter;
 import com.macbarbos.macfood.api.converters.GrupoModelConverter;
 import com.macbarbos.macfood.api.model.GrupoModel;
@@ -25,8 +27,8 @@ import com.macbarbos.macfood.domain.repository.GrupoRepository;
 import com.macbarbos.macfood.domain.service.CadastroGrupoService;
 
 @RestController
-@RequestMapping("/grupos")
-public class GrupoController {
+@RequestMapping(path = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class GrupoController implements GrupoControllerOpenApi {
 	
 	@Autowired
 	private GrupoRepository grupoRepository;
