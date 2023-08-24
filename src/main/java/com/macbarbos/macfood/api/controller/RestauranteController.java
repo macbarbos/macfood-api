@@ -32,6 +32,7 @@ import com.macbarbos.macfood.api.converters.RestauranteModelConverter;
 import com.macbarbos.macfood.api.model.RestauranteModel;
 import com.macbarbos.macfood.api.model.input.RestauranteInput;
 import com.macbarbos.macfood.api.model.view.RestauranteView;
+import com.macbarbos.macfood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.macbarbos.macfood.domain.exception.CidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.CozinhaNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
@@ -42,7 +43,7 @@ import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
