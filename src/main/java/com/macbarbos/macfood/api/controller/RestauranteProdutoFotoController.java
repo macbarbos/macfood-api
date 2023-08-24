@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.macbarbos.macfood.api.converters.FotoProdutoModelConverter;
 import com.macbarbos.macfood.api.model.FotoProdutoModel;
 import com.macbarbos.macfood.api.model.input.FotoProdutoInput;
+import com.macbarbos.macfood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.model.FotoProduto;
 import com.macbarbos.macfood.domain.model.Produto;
@@ -35,7 +36,7 @@ import com.macbarbos.macfood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
 	@Autowired
 	private CadastroProdutoService cadastroProduto;

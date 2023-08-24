@@ -20,6 +20,7 @@ import com.macbarbos.macfood.api.converters.ProdutoConverter;
 import com.macbarbos.macfood.api.converters.ProdutoModelConverter;
 import com.macbarbos.macfood.api.model.ProdutoModel;
 import com.macbarbos.macfood.api.model.input.ProdutoInput;
+import com.macbarbos.macfood.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Produto;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.repository.ProdutoRepository;
@@ -28,7 +29,7 @@ import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 
     @Autowired
     private ProdutoRepository produtoRepository;
