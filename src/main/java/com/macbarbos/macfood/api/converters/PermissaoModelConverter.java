@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.macbarbos.macfood.api.model.input.PermissaoModel;
+import com.macbarbos.macfood.api.model.PermissaoModel;
 import com.macbarbos.macfood.domain.model.Permissao;
 
 @Component

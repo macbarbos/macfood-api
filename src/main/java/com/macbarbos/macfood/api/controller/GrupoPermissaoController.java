@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.api.converters.PermissaoModelConverter;
-import com.macbarbos.macfood.api.model.input.PermissaoModel;
+import com.macbarbos.macfood.api.model.PermissaoModel;
+import com.macbarbos.macfood.api.openapi.controller.GrupoPermissaoControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Grupo;
 import com.macbarbos.macfood.domain.service.CadastroGrupoService;
 
 @RestController
 @RequestMapping(value = "/grupos/{grupoId}/permissoes")
-public class GrupoPermissaoController {
+public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi {
 
 	@Autowired
 	private CadastroGrupoService cadastroGrupo;
