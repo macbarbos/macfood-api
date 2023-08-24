@@ -20,13 +20,14 @@ import com.macbarbos.macfood.api.converters.EstadoConverter;
 import com.macbarbos.macfood.api.converters.EstadoModelConverter;
 import com.macbarbos.macfood.api.model.EstadoModel;
 import com.macbarbos.macfood.api.model.input.EstadoInput;
+import com.macbarbos.macfood.api.openapi.controller.EstadoControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Estado;
 import com.macbarbos.macfood.domain.repository.EstadoRepository;
 import com.macbarbos.macfood.domain.service.CadastroEstadoService;
 
 @RestController
 @RequestMapping("/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 
 	@Autowired
 	private EstadoRepository estadoRepository;

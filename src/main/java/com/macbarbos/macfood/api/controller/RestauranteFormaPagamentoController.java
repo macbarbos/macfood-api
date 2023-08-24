@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.api.converters.FormaPagamentoModelConverter;
 import com.macbarbos.macfood.api.model.FormaPagamentoModel;
+import com.macbarbos.macfood.api.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping(value = "/restaurantes/{restauranteId}/formas-pagamento")
-public class RestauranteFormaPagamentoController {
+public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestaurante;

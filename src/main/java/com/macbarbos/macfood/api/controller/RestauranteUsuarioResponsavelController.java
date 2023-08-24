@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.api.converters.UsuarioModelConverter;
 import com.macbarbos.macfood.api.model.UsuarioModel;
+import com.macbarbos.macfood.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping(value = "/restaurantes/{restauranteId}/responsaveis")
-public class RestauranteUsuarioResponsavelController {
+public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
     @Autowired
     private CadastroRestauranteService cadastroRestaurante;
