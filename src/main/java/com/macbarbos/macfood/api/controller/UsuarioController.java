@@ -22,6 +22,7 @@ import com.macbarbos.macfood.api.model.UsuarioModel;
 import com.macbarbos.macfood.api.model.input.SenhaInput;
 import com.macbarbos.macfood.api.model.input.UsuarioComSenhaInput;
 import com.macbarbos.macfood.api.model.input.UsuarioInput;
+import com.macbarbos.macfood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Usuario;
 import com.macbarbos.macfood.domain.repository.UsuarioRepository;
 import com.macbarbos.macfood.domain.service.CadastroUsuarioService;
@@ -29,7 +30,7 @@ import com.macbarbos.macfood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping(value = "/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

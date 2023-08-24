@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.api.converters.GrupoModelConverter;
 import com.macbarbos.macfood.api.model.GrupoModel;
+import com.macbarbos.macfood.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.macbarbos.macfood.domain.model.Usuario;
 import com.macbarbos.macfood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping(value = "/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	
 	@Autowired
 	private CadastroUsuarioService cadastroUsuarioService;

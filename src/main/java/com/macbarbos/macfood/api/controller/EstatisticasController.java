@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macbarbos.macfood.api.model.dto.VendaDiaria;
+import com.macbarbos.macfood.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.macbarbos.macfood.domain.filter.VendaDiariaFilter;
 import com.macbarbos.macfood.domain.service.VendaQueryService;
 import com.macbarbos.macfood.domain.service.VendaReportService;
 
 @RestController
 @RequestMapping(path = "/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
 	@Autowired
 	private VendaQueryService vendaQueryService;
@@ -26,8 +27,9 @@ public class EstatisticasController {
 	@Autowired
 	private VendaReportService vendaReportService;
 	
-	@GetMapping("/vendas-diarias")
-	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, 
+	@Override
+	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
 		return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
 	}
