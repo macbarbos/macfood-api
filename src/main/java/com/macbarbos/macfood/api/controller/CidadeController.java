@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.api.ResourceUriHelper;
 import com.macbarbos.macfood.api.converters.CidadeConverter;
 import com.macbarbos.macfood.api.converters.CidadeModelConverter;
 import com.macbarbos.macfood.api.model.CidadeModel;
@@ -65,8 +66,12 @@ public class CidadeController implements CidadeControllerOpenApi {
 			Cidade cidade = cidadeConverter.toDomainObject(cidadeInput);
 
 			cidade = cadastroCidade.salvar(cidade);
-
-			return cidadeModelConverter.toModel(cidade);
+			
+			CidadeModel cidadeModel = cidadeModelConverter.toModel(cidade);
+			
+			ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+			
+			return cidadeModel;
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
