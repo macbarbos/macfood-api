@@ -1,13 +1,19 @@
 package com.macbarbos.macfood.api.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class EstadoModel {
+public class EstadoModel extends RepresentationModel<EstadoModel> {
 
-    private Long id;
-    private String nome;
-    
+	@ApiModelProperty(example = "1")
+	private Long id;
+	
+	@ApiModelProperty(example = "Minas Gerais")
+	private String nome;
+	
 }

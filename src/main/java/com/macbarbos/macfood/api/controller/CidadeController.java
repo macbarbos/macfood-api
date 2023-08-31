@@ -1,5 +1,7 @@
 package com.macbarbos.macfood.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -52,11 +54,29 @@ public class CidadeController implements CidadeControllerOpenApi {
 		return cidadeModelConverter.toCollectionModel(todasCidades);
 	}
 
+	@Override
 	@GetMapping("/{cidadeId}")
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
-
-		return cidadeModelConverter.toModel(cidade);
+		
+		CidadeModel cidadeModel = cidadeModelConverter.toModel(cidade);
+		
+		cidadeModel.add(linkTo(CidadeController.class)
+				.slash(cidadeModel.getId()).withSelfRel());
+		
+//		cidadeModel.add(new Link("http://api.algafood.local:8080/cidades/1"));
+		
+		cidadeModel.add(linkTo(CidadeController.class)
+				.withRel("cidades"));
+		
+//		cidadeModel.add(new Link("http://api.algafood.local:8080/cidades", "cidades"));
+		
+		cidadeModel.getEstado().add(linkTo(EstadoController.class)
+				.slash(cidadeModel.getEstado().getId()).withSelfRel());
+		
+//		cidadeModel.getEstado().add(new Link("http://api.algafood.local:8080/estados/1"));
+		
+		return cidadeModel;
 	}
 
 	@PostMapping
