@@ -1,4 +1,4 @@
-package com.macbarbos.macfood.core.openapi;
+package com.macbarbos.macfood.core.springfox;
 
 import java.io.File;
 import java.io.InputStream;
