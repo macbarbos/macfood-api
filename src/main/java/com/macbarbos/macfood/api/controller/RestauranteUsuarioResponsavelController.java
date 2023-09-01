@@ -1,5 +1,8 @@
 package com.macbarbos.macfood.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -33,7 +36,9 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-		return usuarioModelConverter.toCollectionModel(restaurante.getResponsaveis());
+		return usuarioModelConverter.toCollectionModel(restaurante.getResponsaveis())
+				.removeLinks()
+				.add(linkTo(methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withSelfRel());
 	}
 
 	@Override
