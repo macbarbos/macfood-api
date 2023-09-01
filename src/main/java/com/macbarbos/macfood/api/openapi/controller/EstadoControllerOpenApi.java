@@ -1,6 +1,6 @@
 package com.macbarbos.macfood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.macbarbos.macfood.api.exceptionhandler.Problem;
 import com.macbarbos.macfood.api.model.EstadoModel;
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
 public interface EstadoControllerOpenApi {
 
 	@ApiOperation("Lista os estados")
-	List<EstadoModel> listar();
+	CollectionModel<EstadoModel> listar();
 
 	@ApiOperation("Busca um estado por ID")
 	@ApiResponses({
