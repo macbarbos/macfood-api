@@ -1,9 +1,9 @@
 package com.macbarbos.macfood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,31 +19,34 @@ import com.macbarbos.macfood.domain.model.Restaurante;
 import com.macbarbos.macfood.domain.service.CadastroRestauranteService;
 
 @RestController
-@RequestMapping(value = "/restaurantes/{restauranteId}/responsaveis")
+@RequestMapping(path = "/restaurantes/{restauranteId}/responsaveis", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
-    @Autowired
-    private CadastroRestauranteService cadastroRestaurante;
-    
-    @Autowired
-    private UsuarioModelConverter usuarioModelConverter;
-    
-    @GetMapping
-    public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
-        Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-        
-        return usuarioModelConverter.toCollectionModel(restaurante.getResponsaveis());
-    }
-    
-    @DeleteMapping("/{usuarioId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
-        cadastroRestaurante.desassociarResponsavel(restauranteId, usuarioId);
-    }
-    
-    @PutMapping("/{usuarioId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
-        cadastroRestaurante.associarResponsavel(restauranteId, usuarioId);
-    }
+	@Autowired
+	private CadastroRestauranteService cadastroRestaurante;
+
+	@Autowired
+	private UsuarioModelConverter usuarioModelConverter;
+
+	@Override
+	@GetMapping
+	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
+		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+
+		return usuarioModelConverter.toCollectionModel(restaurante.getResponsaveis());
+	}
+
+	@Override
+	@DeleteMapping("/{usuarioId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+		cadastroRestaurante.desassociarResponsavel(restauranteId, usuarioId);
+	}
+
+	@Override
+	@PutMapping("/{usuarioId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+		cadastroRestaurante.associarResponsavel(restauranteId, usuarioId);
+	}
 }
