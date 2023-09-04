@@ -1,14 +1,13 @@
 package com.macbarbos.macfood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +58,9 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private PedidoConverter pedidoConverter;
 	
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	
 //	@GetMapping
 //	public List<PedidoResumoModel> listar() {
 //		List<Pedido> todosPedidos = pedidoRepository.findAll();
@@ -70,21 +72,16 @@ public class PedidoController implements PedidoControllerOpenApi {
 		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
 				name = "campos", paramType = "query", type = "string")
 	})
+	@Override
 	@GetMapping
-	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
-			@PageableDefault(size = 10) Pageable pageable) {
-		pageable = traduzirPageable(pageable);
-		
-		Page<Pedido> pedidosPage = pedidoRepository.findAll(
-				PedidoSpecs.usandoFiltro(filtro), pageable);
-		
-		List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelConverter
-				.toCollectionModel(pedidosPage.getContent());
-		
-		Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(
-				pedidosResumoModel, pageable, pedidosPage.getTotalElements());
-		
-		return pedidosResumoModelPage;
+	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
+	        @PageableDefault(size = 10) Pageable pageable) {
+	    pageable = traduzirPageable(pageable);
+	    
+	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
+	            PedidoSpecs.usandoFiltro(filtro), pageable);
+	    
+	    return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelConverter);
 	}
 	
 	@PostMapping
