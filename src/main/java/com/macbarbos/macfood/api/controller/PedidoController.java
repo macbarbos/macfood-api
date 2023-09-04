@@ -26,6 +26,7 @@ import com.macbarbos.macfood.api.model.PedidoModel;
 import com.macbarbos.macfood.api.model.PedidoResumoModel;
 import com.macbarbos.macfood.api.model.input.PedidoInput;
 import com.macbarbos.macfood.api.openapi.controller.PedidoControllerOpenApi;
+import com.macbarbos.macfood.core.data.PageWrapper;
 import com.macbarbos.macfood.core.data.PageableTranslator;
 import com.macbarbos.macfood.domain.exception.EntidadeNaoEncontradaException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
@@ -61,27 +62,18 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 	
-//	@GetMapping
-//	public List<PedidoResumoModel> listar() {
-//		List<Pedido> todosPedidos = pedidoRepository.findAll();
-//		
-//		return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
-//	}
-
-	@ApiImplicitParams({
-		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-				name = "campos", paramType = "query", type = "string")
-	})
 	@Override
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
-	        @PageableDefault(size = 10) Pageable pageable) {
-	    pageable = traduzirPageable(pageable);
-	    
-	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
-	            PedidoSpecs.usandoFiltro(filtro), pageable);
-	    
-	    return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelConverter);
+			@PageableDefault(size = 10) Pageable pageable) {
+		Pageable pageableTraduzido = traduzirPageable(pageable);
+		
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(
+				PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+		
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+		
+		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelConverter);
 	}
 	
 	@PostMapping
