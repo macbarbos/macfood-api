@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 import com.macbarbos.macfood.api.MacFoodLinks;
 import com.macbarbos.macfood.api.controller.RestauranteController;
-import com.macbarbos.macfood.api.model.RestauranteModel;
+import com.macbarbos.macfood.api.model.RestauranteBasicoModel;
 import com.macbarbos.macfood.domain.model.Restaurante;
 
 @Component
-public class RestauranteModelConverter 
-		extends RepresentationModelAssemblerSupport<Restaurante, RestauranteModel> {
+public class RestauranteBasicoModelConverter 
+		extends RepresentationModelAssemblerSupport<Restaurante, RestauranteBasicoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -21,13 +21,15 @@ public class RestauranteModelConverter
 	@Autowired
 	private MacFoodLinks macFoodLinks;
 	
-	public RestauranteModelConverter() {
-		super(RestauranteController.class, RestauranteModel.class);
+	public RestauranteBasicoModelConverter() {
+		super(RestauranteController.class, RestauranteBasicoModel.class);
 	}
 	
 	@Override
-	public RestauranteModel toModel(Restaurante restaurante) {
-		RestauranteModel restauranteModel = createModelWithId(restaurante.getId(), restaurante);
+	public RestauranteBasicoModel toModel(Restaurante restaurante) {
+		RestauranteBasicoModel restauranteModel = createModelWithId(
+				restaurante.getId(), restaurante);
+		
 		modelMapper.map(restaurante, restauranteModel);
 		
 		restauranteModel.add(macFoodLinks.linkToRestaurantes("restaurantes"));
@@ -35,20 +37,11 @@ public class RestauranteModelConverter
 		restauranteModel.getCozinha().add(
 				macFoodLinks.linkToCozinha(restaurante.getCozinha().getId()));
 		
-		restauranteModel.getEndereco().getCidade().add(
-				macFoodLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
-		
-		restauranteModel.add(macFoodLinks.linkToRestauranteFormasPagamento(restaurante.getId(), 
-				"formas-pagamento"));
-		
-		restauranteModel.add(macFoodLinks.linkToRestauranteResponsaveis(restaurante.getId(), 
-				"responsaveis"));
-		
 		return restauranteModel;
 	}
 	
 	@Override
-	public CollectionModel<RestauranteModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
+	public CollectionModel<RestauranteBasicoModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
 		return super.toCollectionModel(entities)
 				.add(macFoodLinks.linkToRestaurantes());
 	}
