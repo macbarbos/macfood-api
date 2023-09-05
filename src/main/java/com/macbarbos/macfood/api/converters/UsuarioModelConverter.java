@@ -1,7 +1,6 @@
 package com.macbarbos.macfood.api.converters;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.macbarbos.macfood.api.MacFoodLinks;
 import com.macbarbos.macfood.api.controller.UsuarioController;
-import com.macbarbos.macfood.api.controller.UsuarioGrupoController;
 import com.macbarbos.macfood.api.model.UsuarioModel;
 import com.macbarbos.macfood.domain.model.Usuario;
 
@@ -19,6 +18,9 @@ public class UsuarioModelConverter extends RepresentationModelAssemblerSupport<U
 	
 	@Autowired
     private ModelMapper modelMapper;
+	
+	@Autowired
+    private MacFoodLinks macFoodLinks;
 	
 	public UsuarioModelConverter() {
 		super(UsuarioController.class, UsuarioModel.class);
@@ -29,10 +31,9 @@ public class UsuarioModelConverter extends RepresentationModelAssemblerSupport<U
 		UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
 		modelMapper.map(usuario, usuarioModel);
 		
-		usuarioModel.add(linkTo(UsuarioController.class).withRel("usuarios"));
+		usuarioModel.add(macFoodLinks.linkToUsuarios("usuarios"));
 		
-		usuarioModel.add(linkTo(methodOn(UsuarioGrupoController.class)
-				.listar(usuario.getId())).withRel("grupos-usuario"));
+		usuarioModel.add(macFoodLinks.linkToUsuario(usuario.getId(), "grupos-usuario"));
 		
 		return usuarioModel;
 	}

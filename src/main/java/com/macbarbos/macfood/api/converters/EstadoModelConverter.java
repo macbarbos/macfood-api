@@ -8,6 +8,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.macbarbos.macfood.api.MacFoodLinks;
 import com.macbarbos.macfood.api.controller.EstadoController;
 import com.macbarbos.macfood.api.model.EstadoModel;
 import com.macbarbos.macfood.domain.model.Estado;
@@ -18,19 +19,22 @@ public class EstadoModelConverter extends RepresentationModelAssemblerSupport<Es
 	@Autowired
     private ModelMapper modelMapper;
 	
+	@Autowired
+    private MacFoodLinks macFoodLinks;
+	
 	public EstadoModelConverter() {
 		super(EstadoController.class, EstadoModel.class);
 	}
     
 	@Override
-    public EstadoModel toModel(Estado estado) {
-        EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
-        modelMapper.map(estado, estadoModel);
-        
-        estadoModel.add(linkTo(EstadoController.class).withRel("estados"));
-        
-        return estadoModel;
-    }
+	public EstadoModel toModel(Estado estado) {
+	    EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
+	    modelMapper.map(estado, estadoModel);
+	    
+	    estadoModel.add(macFoodLinks.linkToEstados("estados"));
+	    
+	    return estadoModel;
+	}
     
     @Override
     public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
