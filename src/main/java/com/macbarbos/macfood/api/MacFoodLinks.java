@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.macbarbos.macfood.api.controller.CidadeController;
 import com.macbarbos.macfood.api.controller.CozinhaController;
 import com.macbarbos.macfood.api.controller.EstadoController;
+import com.macbarbos.macfood.api.controller.FluxoPedidoController;
 import com.macbarbos.macfood.api.controller.FormaPagamentoController;
 import com.macbarbos.macfood.api.controller.PedidoController;
 import com.macbarbos.macfood.api.controller.RestauranteController;
@@ -41,6 +42,21 @@ public class MacFoodLinks {
 		String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
 		
 		return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIABLES.concat(filtroVariables)), "pedidos");
+	}
+	
+	public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class)
+				.confirmar(codigoPedido)).withRel(rel);
+	}
+	
+	public Link linkToEntregaPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class)
+				.entregar(codigoPedido)).withRel(rel);
+	}
+	
+	public Link linkToCancelamentoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class)
+				.cancelar(codigoPedido)).withRel(rel);
 	}
 	
 	public Link linkToRestaurante(Long restauranteId, String rel) {

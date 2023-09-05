@@ -30,6 +30,18 @@ public class PedidoModelConverter extends RepresentationModelAssemblerSupport<Pe
         
         pedidoModel.add(macFoodLinks.linkToPedidos());
         
+        if (pedido.podeSerConfirmado()) {
+			pedidoModel.add(macFoodLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+		}
+		
+		if (pedido.podeSerCancelado()) {
+			pedidoModel.add(macFoodLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+		}
+		
+		if (pedido.podeSerEntregue()) {
+			pedidoModel.add(macFoodLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+		}
+        
         pedidoModel.getRestaurante().add(
         		macFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
         
