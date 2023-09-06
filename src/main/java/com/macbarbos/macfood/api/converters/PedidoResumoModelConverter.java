@@ -28,7 +28,7 @@ public class PedidoResumoModelConverter extends RepresentationModelAssemblerSupp
         PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
         
-        pedidoModel.add(macFoodLinks.linkToPedidos());
+        pedidoModel.add(macFoodLinks.linkToPedidos("pedidos"));
         
         pedidoModel.getRestaurante().add(
         		macFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
