@@ -32,6 +32,26 @@ public class RestauranteModelConverter
 		
 		restauranteModel.add(macFoodLinks.linkToRestaurantes("restaurantes"));
 		
+		if (restaurante.ativacaoPermitida()) {
+			restauranteModel.add(
+					macFoodLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+		}
+
+		if (restaurante.inativacaoPermitida()) {
+			restauranteModel.add(
+					macFoodLinks.linkToRestauranteInativacao(restaurante.getId(), "inativar"));
+		}
+
+		if (restaurante.aberturaPermitida()) {
+			restauranteModel.add(
+					macFoodLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
+		}
+
+		if (restaurante.fechamentoPermitido()) {
+			restauranteModel.add(
+					macFoodLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
+		}
+		
 		restauranteModel.getCozinha().add(
 				macFoodLinks.linkToCozinha(restaurante.getCozinha().getId()));
 		
