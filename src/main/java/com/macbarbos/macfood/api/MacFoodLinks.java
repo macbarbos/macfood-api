@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.macbarbos.macfood.api.controller.CidadeController;
 import com.macbarbos.macfood.api.controller.CozinhaController;
 import com.macbarbos.macfood.api.controller.EstadoController;
+import com.macbarbos.macfood.api.controller.EstatisticasController;
 import com.macbarbos.macfood.api.controller.FluxoPedidoController;
 import com.macbarbos.macfood.api.controller.FormaPagamentoController;
 import com.macbarbos.macfood.api.controller.GrupoController;
@@ -278,6 +279,23 @@ public class MacFoodLinks {
 
 	public Link linkToFormasPagamento() {
 		return linkToFormasPagamento(IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToEstatisticas(String rel) {
+	    return linkTo(EstatisticasController.class).withRel(rel);
+	}
+
+	public Link linkToEstatisticasVendasDiarias(String rel) {
+	    TemplateVariables filtroVariables = new TemplateVariables(
+	            new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+	            new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+	            new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM),
+	            new TemplateVariable("timeOffset", VariableType.REQUEST_PARAM));
+	    
+	    String pedidosUrl = linkTo(methodOn(EstatisticasController.class)
+	            .consultarVendasDiarias(null, null)).toUri().toString();
+	    
+	    return Link.of(UriTemplate.of(pedidosUrl, filtroVariables), rel);
 	}
 
 }
