@@ -32,6 +32,7 @@ public class RootEntryPointController {
 		rootEntryPointModel.add(macFoodLinks.linkToFormasPagamento("formas-pagamento"));
 		rootEntryPointModel.add(macFoodLinks.linkToEstados("estados"));
 		rootEntryPointModel.add(macFoodLinks.linkToCidades("cidades"));
+		rootEntryPointModel.add(macFoodLinks.linkToEstatisticas("estatisticas"));
 		
 		return rootEntryPointModel;
 	}
