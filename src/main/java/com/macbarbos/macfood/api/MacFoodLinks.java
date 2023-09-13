@@ -16,6 +16,8 @@ import com.macbarbos.macfood.api.controller.CozinhaController;
 import com.macbarbos.macfood.api.controller.EstadoController;
 import com.macbarbos.macfood.api.controller.FluxoPedidoController;
 import com.macbarbos.macfood.api.controller.FormaPagamentoController;
+import com.macbarbos.macfood.api.controller.GrupoController;
+import com.macbarbos.macfood.api.controller.GrupoPermissaoController;
 import com.macbarbos.macfood.api.controller.PedidoController;
 import com.macbarbos.macfood.api.controller.RestauranteController;
 import com.macbarbos.macfood.api.controller.RestauranteFormaPagamentoController;
@@ -124,6 +126,18 @@ public class MacFoodLinks {
 	public Link linkToGruposUsuario(Long usuarioId) {
 		return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
 	}
+	
+	public Link linkToGrupos(String rel) {
+		return linkTo(GrupoController.class).withRel(rel);
+	}
+
+	public Link linkToGrupos() {
+		return linkToGrupos(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel(rel);
+	}    
 
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
 		return linkTo(methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withRel(rel);

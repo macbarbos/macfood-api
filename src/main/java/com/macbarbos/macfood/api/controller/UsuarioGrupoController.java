@@ -1,9 +1,9 @@
 package com.macbarbos.macfood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ import com.macbarbos.macfood.domain.model.Usuario;
 import com.macbarbos.macfood.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping(value = "/usuarios/{usuarioId}/grupos")
+@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	
 	@Autowired
@@ -28,10 +28,12 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	@Autowired
 	private GrupoModelConverter grupoModelConverter;
 	
+	@Override
 	@GetMapping
-	public List<GrupoModel> listar(@PathVariable Long usuarioId){
+	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
 		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
-		return grupoModelConverter.toCollectionModel(usuario.getGrupos());
+		
+		return grupoModelConverter.toCollectionModel(usuario.getGrupos()).removeLinks();
 	}
 	
 	@PutMapping("/{grupoId}")
