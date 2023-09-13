@@ -1,9 +1,10 @@
 package com.macbarbos.macfood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.macbarbos.macfood.api.MacFoodLinks;
 import com.macbarbos.macfood.api.converters.GrupoModelConverter;
 import com.macbarbos.macfood.api.model.GrupoModel;
 import com.macbarbos.macfood.api.openapi.controller.UsuarioGrupoControllerOpenApi;
@@ -19,7 +21,7 @@ import com.macbarbos.macfood.domain.model.Usuario;
 import com.macbarbos.macfood.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping(value = "/usuarios/{usuarioId}/grupos")
+@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	
 	@Autowired
@@ -28,22 +30,42 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	@Autowired
 	private GrupoModelConverter grupoModelConverter;
 	
+	@Autowired
+	private MacFoodLinks macFoodLinks;
+	
+	@Override
 	@GetMapping
-	public List<GrupoModel> listar(@PathVariable Long usuarioId){
+	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
 		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
-		return grupoModelConverter.toCollectionModel(usuario.getGrupos());
+		
+		CollectionModel<GrupoModel> gruposModel = grupoModelConverter.toCollectionModel(usuario.getGrupos())
+	            .removeLinks()
+	            .add(macFoodLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+	    
+	    gruposModel.getContent().forEach(grupoModel -> {
+	        grupoModel.add(macFoodLinks.linkToUsuarioGrupoDesassociacao(
+	                usuarioId, grupoModel.getId(), "desassociar"));
+	    });
+	    
+	    return gruposModel;
 	}
 	
+	@Override
 	@PutMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
+	public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		cadastroUsuarioService.associarGrupo(usuarioId, grupoId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@DeleteMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
+	public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		cadastroUsuarioService.desassociarGrupo(usuarioId, grupoId);
+		
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.macbarbos.macfood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.macbarbos.macfood.api.exceptionhandler.Problem;
 import com.macbarbos.macfood.api.model.GrupoModel;
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
 public interface GrupoControllerOpenApi {
 
     @ApiOperation("Lista os grupos")
-    List<GrupoModel> listar();
+    CollectionModel<GrupoModel> listar();
     
     @ApiOperation("Busca um grupo por ID")
     @ApiResponses({
