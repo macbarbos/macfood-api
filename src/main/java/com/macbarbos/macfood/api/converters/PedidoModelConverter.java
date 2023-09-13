@@ -28,7 +28,7 @@ public class PedidoModelConverter extends RepresentationModelAssemblerSupport<Pe
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
         
-        pedidoModel.add(macFoodLinks.linkToPedidos());
+        pedidoModel.add(macFoodLinks.linkToPedidos("pedidos"));
         
         if (pedido.podeSerConfirmado()) {
 			pedidoModel.add(macFoodLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
