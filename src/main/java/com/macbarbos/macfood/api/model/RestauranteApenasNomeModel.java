@@ -10,11 +10,12 @@ import lombok.Setter;
 @Relation(collectionRelation = "restaurantes")
 @Setter
 @Getter
-public class RestauranteResumoModel extends RepresentationModel<RestauranteResumoModel> {
+public class RestauranteApenasNomeModel extends RepresentationModel<RestauranteApenasNomeModel> {
 
 	@ApiModelProperty(example = "1")
 	private Long id;
-
+	
 	@ApiModelProperty(example = "Thai Gourmet")
-	private String nome;  
+	private String nome;
+	
 }
