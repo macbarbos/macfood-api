@@ -10,7 +10,7 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.stereotype.Repository;
 
-import com.macbarbos.macfood.api.model.dto.VendaDiaria;
+import com.macbarbos.macfood.api.v1.model.dto.VendaDiaria;
 import com.macbarbos.macfood.domain.filter.VendaDiariaFilter;
 import com.macbarbos.macfood.domain.model.Pedido;
 import com.macbarbos.macfood.domain.model.StatusPedido;

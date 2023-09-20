@@ -2,7 +2,7 @@ package com.macbarbos.macfood.domain.service;
 
 import java.util.List;
 
-import com.macbarbos.macfood.api.model.dto.VendaDiaria;
+import com.macbarbos.macfood.api.v1.model.dto.VendaDiaria;
 import com.macbarbos.macfood.domain.filter.VendaDiariaFilter;
 
 public interface VendaQueryService {
