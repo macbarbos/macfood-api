@@ -29,8 +29,11 @@ import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
-@RequestMapping(path = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CozinhaController implements CozinhaControllerOpenApi{
 
 	@Autowired
@@ -50,6 +53,13 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 
 	@GetMapping
 	public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+		
+		//apenas para fins didáticos
+		log.info("Consultando cozinhas com páginas de {} registros...", pageable.getPageSize());
+
+		/*
+		 * if (true) { throw new RuntimeException("Teste de exception"); }
+		 */
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 		
 		PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler.toModel(cozinhasPage, cozinhaModelConverter);

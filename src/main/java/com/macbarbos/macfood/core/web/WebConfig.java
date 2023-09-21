@@ -5,7 +5,6 @@ import javax.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,10 +18,11 @@ public class WebConfig implements WebMvcConfigurer {
 //			.maxAge(30);
 	}
 	
-	@Override
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		configurer.defaultContentType(MacFoodMediaTypes.V2_APPLICATION_JSON);
-	}
+	/*
+	 * @Override public void
+	 * configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+	 * configurer.defaultContentType(MacFoodMediaTypes.V2_APPLICATION_JSON); }
+	 */
 
 	@Bean
 	public Filter shallowEtagHeaderFilter() {

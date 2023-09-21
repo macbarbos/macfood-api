@@ -36,7 +36,7 @@ import com.macbarbos.macfood.domain.service.FotoStorageService;
 import com.macbarbos.macfood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
+@RequestMapping("/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
 	@Autowired
