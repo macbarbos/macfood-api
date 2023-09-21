@@ -21,7 +21,7 @@ import com.macbarbos.macfood.domain.model.Usuario;
 import com.macbarbos.macfood.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	
 	@Autowired

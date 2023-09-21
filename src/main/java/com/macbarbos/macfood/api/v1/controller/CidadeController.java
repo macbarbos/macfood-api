@@ -24,7 +24,6 @@ import com.macbarbos.macfood.api.v1.converters.CidadeModelConverter;
 import com.macbarbos.macfood.api.v1.model.CidadeModel;
 import com.macbarbos.macfood.api.v1.model.input.CidadeInput;
 import com.macbarbos.macfood.api.v1.openapi.controller.CidadeControllerOpenApi;
-import com.macbarbos.macfood.core.web.MacFoodMediaTypes;
 import com.macbarbos.macfood.domain.exception.EstadoNaoEncontradoException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Cidade;

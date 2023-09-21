@@ -30,7 +30,7 @@ import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
 
 @RestController
-@RequestMapping(path = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CozinhaController implements CozinhaControllerOpenApi{
 
 	@Autowired

@@ -13,7 +13,7 @@ import com.macbarbos.macfood.api.v1.openapi.controller.FluxoPedidoControllerOpen
 import com.macbarbos.macfood.domain.service.FluxoPedidoService;
 
 @RestController
-@RequestMapping(value = "/pedidos/{codigoPedido}")
+@RequestMapping(value = "/v1/pedidos/{codigoPedido}")
 public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 
 	@Autowired
