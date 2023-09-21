@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ import com.macbarbos.macfood.domain.repository.CidadeRepository;
 import com.macbarbos.macfood.domain.service.CadastroCidadeService;
 
 @RestController
-@RequestMapping(path= "/cidades")
+@RequestMapping(path= "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
@@ -47,7 +48,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	private CidadeConverter cidadeConverter;
 
 	@Override
-	@GetMapping(produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE)
+	@GetMapping /* (produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE) */
 	public CollectionModel<CidadeModel> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
 		
@@ -55,14 +56,14 @@ public class CidadeController implements CidadeControllerOpenApi {
 	}
 
 	@Override
-	@GetMapping(path = "/{cidadeId}", produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{cidadeId}"/* , produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE */)
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 		
 		return cidadeModelConverter.toModel(cidade);
 	}
 
-	@PostMapping(produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE)
+	@PostMapping /* (produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE) */
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
@@ -80,7 +81,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		}
 	}
 
-	@PutMapping(path = "/{cidadeId}", produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE)
+	@PutMapping(path = "/{cidadeId}"/* , produces = MacFoodMediaTypes.V1_APPLICATION_JSON_VALUE */)
 	public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
