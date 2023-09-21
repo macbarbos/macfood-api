@@ -24,13 +24,14 @@ import com.macbarbos.macfood.api.v2.converters.CozinhaConverterV2;
 import com.macbarbos.macfood.api.v2.converters.CozinhaModelConverterV2;
 import com.macbarbos.macfood.api.v2.model.CozinhaModelV2;
 import com.macbarbos.macfood.api.v2.model.input.CozinhaInputV2;
+import com.macbarbos.macfood.api.v2.openapi.CozinhaControllerV2OpenApi;
 import com.macbarbos.macfood.domain.model.Cozinha;
 import com.macbarbos.macfood.domain.repository.CozinhasRepository;
 import com.macbarbos.macfood.domain.service.CadastroCozinhaService;
 
 @RestController
 @RequestMapping(value = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
 
     @Autowired
     private CozinhasRepository cozinhaRepository;
@@ -57,6 +58,7 @@ public class CozinhaControllerV2 {
         return cozinhasPagedModel;
     }
     
+    @Override
     @GetMapping("/{cozinhaId}")
     public CozinhaModelV2 buscar(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
@@ -64,6 +66,7 @@ public class CozinhaControllerV2 {
         return cozinhaModelAssembler.toModel(cozinha);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaModelV2 adicionar(@RequestBody @Valid CozinhaInputV2 cozinhaInput) {
@@ -73,6 +76,7 @@ public class CozinhaControllerV2 {
         return cozinhaModelAssembler.toModel(cozinha);
     }
     
+    @Override
     @PutMapping("/{cozinhaId}")
     public CozinhaModelV2 atualizar(@PathVariable Long cozinhaId,
             @RequestBody @Valid CozinhaInputV2 cozinhaInput) {
@@ -83,6 +87,7 @@ public class CozinhaControllerV2 {
         return cozinhaModelAssembler.toModel(cozinhaAtual);
     }
     
+    @Override
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {

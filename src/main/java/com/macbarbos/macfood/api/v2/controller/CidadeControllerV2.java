@@ -23,6 +23,7 @@ import com.macbarbos.macfood.api.v2.converters.CidadeConverterV2;
 import com.macbarbos.macfood.api.v2.converters.CidadeModelConverterV2;
 import com.macbarbos.macfood.api.v2.model.CidadeModelV2;
 import com.macbarbos.macfood.api.v2.model.input.CidadeInputV2;
+import com.macbarbos.macfood.api.v2.openapi.CidadeControllerV2OpenApi;
 import com.macbarbos.macfood.domain.exception.EstadoNaoEncontradoException;
 import com.macbarbos.macfood.domain.exception.NegocioException;
 import com.macbarbos.macfood.domain.model.Cidade;
@@ -31,7 +32,7 @@ import com.macbarbos.macfood.domain.service.CadastroCidadeService;
 
 @RestController
 @RequestMapping(path= "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 /* implements CidadeControllerOpenApi */ {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
@@ -45,6 +46,7 @@ public class CidadeControllerV2 /* implements CidadeControllerOpenApi */ {
 	@Autowired
 	private CidadeConverterV2 cidadeConverter;
 
+	@Override
 	@GetMapping /* (produces = MacFoodMediaTypes.V2_APPLICATION_JSON_VALUE) */
 	public CollectionModel<CidadeModelV2> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -52,6 +54,7 @@ public class CidadeControllerV2 /* implements CidadeControllerOpenApi */ {
 		return cidadeModelConverter.toCollectionModel(todasCidades);
 	}
 
+	@Override
 	@GetMapping(path = "/{cidadeId}"/* , produces = MacFoodMediaTypes.V2_APPLICATION_JSON_VALUE */)
 	public CidadeModelV2 buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
@@ -59,6 +62,7 @@ public class CidadeControllerV2 /* implements CidadeControllerOpenApi */ {
 		return cidadeModelConverter.toModel(cidade);
 	}
 
+	@Override
 	@PostMapping /* (produces = MacFoodMediaTypes.V2_APPLICATION_JSON_VALUE) */
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeModelV2 adicionar(@RequestBody CidadeInputV2 cidadeInput) {
@@ -77,6 +81,7 @@ public class CidadeControllerV2 /* implements CidadeControllerOpenApi */ {
 		}
 	}
 
+	@Override
 	@PutMapping(path = "/{cidadeId}"/* , produces = MacFoodMediaTypes.V2_APPLICATION_JSON_VALUE */)
 	public CidadeModelV2 atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInputV2 cidadeInput) {
 		try {
@@ -92,6 +97,7 @@ public class CidadeControllerV2 /* implements CidadeControllerOpenApi */ {
 		}
 	}
 
+	@Override
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
